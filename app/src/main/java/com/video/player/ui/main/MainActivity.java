@@ -1,12 +1,10 @@
-package com.capillary.myapplication.activity.main;
+package com.video.player.ui.main;
 
 import android.content.res.Configuration;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Handler;
 import android.text.TextUtils;
-import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -21,10 +19,9 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.capillary.myapplication.R;
-import com.capillary.myapplication.adapter.VideoAdapter;
-import com.capillary.myapplication.base.BaseActivity;
-import com.capillary.myapplication.model.VideoListModel;
+import com.video.player.R;
+import com.video.player.responses.VideoListModel;
+import com.video.player.ui.base.BaseActivity;
 
 import java.util.List;
 

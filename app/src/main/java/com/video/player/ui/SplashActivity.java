@@ -1,11 +1,11 @@
-package com.capillary.myapplication.activity;
+package com.video.player.ui;
 
 import android.content.Intent;
 import android.os.Handler;
 
-import com.capillary.myapplication.R;
-import com.capillary.myapplication.activity.main.MainActivity;
-import com.capillary.myapplication.base.BaseActivity;
+import com.video.player.R;
+import com.video.player.ui.base.BaseActivity;
+
 
 public class SplashActivity extends BaseActivity {
 

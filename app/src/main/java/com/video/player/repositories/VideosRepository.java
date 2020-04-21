@@ -1,11 +1,11 @@
-package com.capillary.myapplication.util;
+package com.video.player.repositories;
 
 import android.content.Context;
 
 import java.io.IOException;
 import java.io.InputStream;
 
-public class Utils {
+public class VideosRepository {
 
     public static String getJsonFromAssets(Context context, String fileName) {
         String jsonString;

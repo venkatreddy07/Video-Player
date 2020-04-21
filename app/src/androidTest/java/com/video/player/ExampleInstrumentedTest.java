@@ -1,4 +1,4 @@
-package com.capillary.myapplication;
+package com.video.player;
 
 import android.content.Context;
 

@@ -1,4 +1,4 @@
-package com.capillary.myapplication.base;
+package com.video.player.ui.base;
 
 import android.os.Bundle;
 

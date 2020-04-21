@@ -1,4 +1,4 @@
-package com.capillary.myapplication.adapter;
+package com.video.player.ui.main;
 
 import android.content.Context;
 import android.text.TextUtils;
@@ -13,8 +13,8 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.capillary.myapplication.R;
-import com.capillary.myapplication.model.VideoListModel;
+import com.video.player.R;
+import com.video.player.responses.VideoListModel;
 
 import java.util.List;
 

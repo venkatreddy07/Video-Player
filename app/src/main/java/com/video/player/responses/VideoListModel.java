@@ -1,9 +1,7 @@
-package com.capillary.myapplication.model;
+package com.video.player.responses;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-
-import java.util.List;
 
 public class VideoListModel {
 

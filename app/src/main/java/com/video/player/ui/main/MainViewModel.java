@@ -1,12 +1,12 @@
-package com.capillary.myapplication.activity.main;
+package com.video.player.ui.main;
 
 import android.content.Context;
 
 import androidx.lifecycle.ViewModel;
 
-import com.capillary.myapplication.model.VideoListModel;
-import com.capillary.myapplication.model.VideosModel;
-import com.capillary.myapplication.util.Utils;
+import com.video.player.responses.VideoListModel;
+import com.video.player.responses.VideosModel;
+import com.video.player.repositories.VideosRepository;
 import com.google.gson.Gson;
 
 import java.util.List;
@@ -16,7 +16,7 @@ public class MainViewModel extends ViewModel {
 
     public List<VideoListModel> fetchVideoData(Context context) {
 
-        String videoDetails = Utils.getJsonFromAssets(context, "videodetails.json");
+        String videoDetails = VideosRepository.getJsonFromAssets(context, "videodetails.json");
 
         return new Gson().fromJson(videoDetails, VideosModel.class).getVideos();
     }
