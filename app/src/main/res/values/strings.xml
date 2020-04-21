@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Video Player</string>
+
+    <string name="no_connectivity">Please check your network connection</string>
 </resources>
