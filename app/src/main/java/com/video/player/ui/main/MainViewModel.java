@@ -2,9 +2,7 @@ package com.video.player.ui.main;
 
 import android.content.Context;
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Handler;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.SeekBar;
 
@@ -14,12 +12,11 @@ import androidx.lifecycle.ViewModel;
 import com.google.gson.Gson;
 import com.video.player.databinding.ActivityMainBinding;
 import com.video.player.repositories.VideosRepository;
-import com.video.player.responses.VideoListModel;
 import com.video.player.responses.VideosModel;
 
-import java.util.List;
-
 public class MainViewModel extends ViewModel {
+
+    private MainActivity activity;
 
     private ActivityMainBinding binding;
 
@@ -27,7 +24,12 @@ public class MainViewModel extends ViewModel {
 
     private int currentPosition;
 
-    private List<VideoListModel> videosList;
+    MainViewModel(MainActivity activity, ActivityMainBinding binding) {
+        this.activity = activity;
+        this.binding = binding;
+    }
+
+    //private List<VideoListModel> videosList;
 
 
     MutableLiveData<VideosModel> fetchVideoData(Context context) {
@@ -40,13 +42,7 @@ public class MainViewModel extends ViewModel {
         return mutableLiveData;
     }
 
-
-    void setInitValues(ActivityMainBinding binding, List<VideoListModel> videosList) {
-        this.binding = binding;
-        this.videosList = videosList;
-    }
-
-    void setData(int position, VideoListModel videoListModel) {
+   /* void setData(int position, VideoListModel videoListModel) {
         binding.videoView.setClickable(false);
 
         currentPosition = position;
@@ -67,6 +63,19 @@ public class MainViewModel extends ViewModel {
 
             videoListener();
         }
+    }*/
+
+    void prepareVideo(int position) {
+        binding.videoView.setClickable(false);
+
+        currentPosition = position;
+
+        //scroll selected item
+        if (binding.videosRsv.getLayoutManager() != null) {
+            binding.videosRsv.getLayoutManager().scrollToPosition(currentPosition);
+        }
+
+        videoListener();
     }
 
     //start playing video and seekbar initialization
@@ -99,7 +108,7 @@ public class MainViewModel extends ViewModel {
             @Override
             public void onCompletion(MediaPlayer mp) {
                 binding.videoProgress.setVisibility(View.VISIBLE);
-                playNextVideo();
+                playNextVideo(activity.getVideoListSize());
             }
         });
     }
@@ -122,6 +131,7 @@ public class MainViewModel extends ViewModel {
     }
 
     //update seekabr on every seconds
+    private int oldPosition;
     private Handler seekBarHandler = new Handler();
     private Runnable updateSeekBar = new Runnable() {
         @Override
@@ -129,6 +139,15 @@ public class MainViewModel extends ViewModel {
             if (mediaPlayer != null) {
                 try {
                     int mCurrentPosition = mediaPlayer.getCurrentPosition() / 100;
+
+                    if (oldPosition == mCurrentPosition && binding.videoView.isPlaying()) {
+                        binding.videoProgress.setVisibility(View.VISIBLE);
+                    } else {
+                        binding.videoProgress.setVisibility(View.GONE);
+                    }
+                    oldPosition = mCurrentPosition;
+
+
                     binding.seekbar.setProgress(mCurrentPosition);
                     seekBarHandler.postDelayed(this, 100);
                 } catch (IllegalStateException e) {
@@ -166,7 +185,8 @@ public class MainViewModel extends ViewModel {
 
         if (currentPosition > 0) {
             currentPosition--;
-            setData(currentPosition, videosList.get(currentPosition));
+            //setData(currentPosition, videosList.get(currentPosition));
+            activity.setVideoData(currentPosition);
         }
     }
 
@@ -188,22 +208,23 @@ public class MainViewModel extends ViewModel {
         }
     }
 
-    void forward() {
+    void forward(int listSize) {
         if (binding.controlLayout.getVisibility() == View.VISIBLE) {
             binding.controlLayout.setVisibility(View.GONE);
         }
 
-        playNextVideo();
+        playNextVideo(listSize);
     }
 
-    private void playNextVideo() {
+    private void playNextVideo(int listSize) {
         if (currentPosition >= 0) {
-            if (currentPosition == videosList.size() - 1) {
+            if (currentPosition == listSize - 1) {
                 currentPosition = 0;
             } else {
                 currentPosition++;
             }
-            setData(currentPosition, videosList.get(currentPosition));
+            //setData(currentPosition, videosList.get(currentPosition));
+            activity.setVideoData(currentPosition);
         }
     }
 

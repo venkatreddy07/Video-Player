@@ -1,7 +1,9 @@
 package com.video.player.ui.main;
 
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Toast;
 
@@ -38,7 +40,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         }
 
-        viewModel = new ViewModelProvider(this).get(MainViewModel.class);
+        MainViewModelFactory factory = new MainViewModelFactory(this, binding);
+        viewModel = new ViewModelProvider(this, factory).get(MainViewModel.class);
 
         initView();
     }
@@ -51,9 +54,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     if (videosModel != null) {
                         videosList = videosModel.getVideos();
                         if (videosList != null && videosList.size() > 0) {
-                            viewModel.setInitValues(binding, videosList);
 
-                            viewModel.setData(0, videosList.get(0));
+                            //viewModel.setData(0, videosList.get(0));
+
+                            setVideoData(0);
 
                             setVideoAdapter(videosList);
                         }
@@ -70,6 +74,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         binding.play.setOnClickListener(this);
         binding.pause.setOnClickListener(this);
         binding.forward.setOnClickListener(this);
+    }
+
+    protected void setVideoData(int position) {
+
+        VideoListModel videoListModel = videosList.get(position);
+
+        if (!TextUtils.isEmpty(videoListModel.getTitle()))
+            binding.videoTitle.setText(videoListModel.getTitle());
+
+
+        if (!TextUtils.isEmpty(videoListModel.getUrl())) {
+            binding.videoProgress.setVisibility(View.VISIBLE);
+
+            binding.videoView.setVideoURI(Uri.parse(videoListModel.getUrl()));
+
+            viewModel.prepareVideo(position);
+        }
     }
 
 
@@ -99,7 +120,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
 
             case R.id.forward:
-                viewModel.forward();
+                viewModel.forward(videosList.size());
                 break;
         }
     }
@@ -108,7 +129,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClickPlayList(int position) {
         if (videosList != null && videosList.size() > 0) {
-            viewModel.setData(position, videosList.get(position));
+            //viewModel.setData(position, videosList.get(position));
+            setVideoData(position);
         }
     }
 
@@ -118,7 +140,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // Checks the orientation of the screen
         //accordingly manage the screen size for landscape and portrait
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            binding.vidGuideline.setGuidelinePercent(0.95f);
+            binding.vidGuideline.setGuidelinePercent(1);
         } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
             binding.vidGuideline.setGuidelinePercent(0.35f);
         }
@@ -134,5 +156,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onStop() {
         super.onStop();
         viewModel.stopMediaPlayer();
+    }
+
+    protected int getVideoListSize() {
+        return videosList.size();
     }
 }

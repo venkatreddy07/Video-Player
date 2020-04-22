@@ -3,6 +3,8 @@ package com.video.player.repositories;
 import android.content.Context;
 import android.net.ConnectivityManager;
 
+import com.video.player.R;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Objects;
@@ -19,7 +21,7 @@ public class VideosRepository {
             is.read(buffer);
             is.close();
 
-            jsonString = new String(buffer, "UTF-8");
+            jsonString = new String(buffer, context.getString(R.string.utf_8));
         } catch (IOException e) {
             e.printStackTrace();
             return null;
